@@ -8,8 +8,11 @@ name = "pypi"
 [packages]
 
 hug = "*"
+nexmo = "*"
+cryptography = "*"
 
 
 [dev-packages]
 
 "flake8" = "*"
+ipython = "*"
