@@ -1,9 +1,6 @@
 import os
-import time
-import uuid
-import jwt
-import requests
 import hug
+from recordings import Recording
 
 
 class CallRouter:
@@ -36,32 +33,13 @@ class CallRouter:
             }
         ]
 
-    def recording(self, recording_url, recording_uuid, response):
-        iat = int(time.time())
-        payload = {
-            'application_id': os.environ['APPLICATION_ID'],
-            'iat': iat,
-            'exp': iat + 60,
-            'jti': str(uuid.uuid4()),
-        }
+    def recording(self, recording_url, recording_uuid):
+        recording = Recording(recording_url, recording_uuid)
+        recording.save()
+        recording.transcript()
+        recording.understanding()
 
-        token = jwt.encode(payload, self.private_key, algorithm='RS256')
-
-        headers = {
-            'Authorization': b'Bearer ' + token,
-            'User-Agent': 'python/rapporteur'
-        }
-
-        recording_response = requests.get(recording_url, headers=headers)
-        if recording_response.status_code == 200:
-            with open(f'./recordings/{recording_uuid}.mp3', 'wb') as f:
-                f.write(recording_response.content)
-
-            return {}
-
-        response.status = recording_response.status_code
-        return response
-
+        return recording.analysis
 
 
 routes = CallRouter()

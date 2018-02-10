@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "013173a7721089cd2e7d7d41f2165d186e56285d53652aec6ad318cb3b5affbf"
+            "sha256": "95a27dadf54e52174f7cdd29e33b6c28818edb4fc622e068e17d460044dd0910"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -149,6 +149,26 @@
             ],
             "version": "==1.5.3"
         },
+        "pyopenssl": {
+            "hashes": [
+                "sha256:07a2de1a54de07448732a81e38a55df7da109b2f47f599f8bb35b0cbec69d4bd",
+                "sha256:2c10cfba46a52c0b0950118981d61e72c1e5b1aac451ca1bc77de1a679456773"
+            ],
+            "version": "==17.5.0"
+        },
+        "pysolr": {
+            "hashes": [
+                "sha256:b2c5f920d1cabaff8b465447ee152c6985f120b5895f091cf7bf15ff71ade1dc"
+            ],
+            "version": "==3.7.0"
+        },
+        "python-dateutil": {
+            "hashes": [
+                "sha256:95511bae634d69bc7329ba55e646499a842bc4ec342ad54a8cdb65645a0aad3c",
+                "sha256:891c38b2a02f5bb1be3e4793866c8df49c7d19baabf9c1bad62547e0b4866aca"
+            ],
+            "version": "==2.6.1"
+        },
         "python-mimeparse": {
             "hashes": [
                 "sha256:a295f03ff20341491bfe4717a39cd0a8cc9afad619ba44b77e86b0ab8a2b8282",
@@ -176,6 +196,12 @@
                 "sha256:cc44da8e1145637334317feebd728bd869a35285b93cbb4cca2577da7e62db4f"
             ],
             "version": "==1.22"
+        },
+        "watson-developer-cloud": {
+            "hashes": [
+                "sha256:673af5474c4d969d126bc4edc1632f7be3d0bf8e4f54c7d2b7a26e30c1728bdf"
+            ],
+            "version": "==1.0.2"
         }
     },
     "develop": {
@@ -238,11 +264,11 @@
         },
         "pexpect": {
             "hashes": [
-                "sha256:144939a072a46d32f6e5ecc866509e1d613276781f7182148a08df52eaa7b022",
-                "sha256:8e287b171dbaf249d0b06b5f2e88cb7e694651d2d0b8c15bccb83170d3c55575"
+                "sha256:6ff881b07aff0cb8ec02055670443f784434395f90c3285d2ae470f921ade52a",
+                "sha256:67b85a1565968e3d5b5e7c9283caddc90c3947a2625bed1905be27bd5a03e47d"
             ],
             "markers": "sys_platform != 'win32'",
-            "version": "==4.3.1"
+            "version": "==4.4.0"
         },
         "pickleshare": {
             "hashes": [

@@ -1,0 +1,3 @@
+
+class RecordingNotFoundException(Exception):
+    pass

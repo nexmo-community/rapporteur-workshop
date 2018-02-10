@@ -10,6 +10,7 @@ name = "pypi"
 hug = "*"
 nexmo = "*"
 cryptography = "*"
+watson-developer-cloud = "*"
 
 
 [dev-packages]
