@@ -1,33 +1,84 @@
+import os
+import json
 import tornado.httpserver
 import tornado.websocket
 import tornado.ioloop
 import tornado.web
+from tornado import gen
+import requests
 import logzero
 from logzero import logger
+from watson_developer_cloud import ToneAnalyzerV3
 
 logzero.logfile("/tmp/rapporteur-websocket-server.log", maxBytes=1e6, backupCount=3)
 
 
 class WSHandler(tornado.websocket.WebSocketHandler):
+
     connections = []
+
+    def initialize(self, **kwargs):
+        self.transcriber = tornado.websocket.websocket_connect(
+            'wss://stream.watsonplatform.net/speech-to-text/api/v1/recognize?watson-token={token}&model={model}'.format(
+                token=self.transcriber_token,
+                model=os.environ['REALTIME_TRANSCRIBER_MODEL']
+            ),
+            on_message_callback=self.on_transcriber_message
+        )
+
+        self.tone_analyzer = ToneAnalyzerV3(
+            username=os.environ['TONE_ANALYZER_USERNAME'],
+            password=os.environ['TONE_ANALYZER_PASSWORD'],
+            version='2016-05-19'
+        )
+
+    @property
+    def transcriber_token(self):
+        resp = requests.get(
+            'https://stream.watsonplatform.net/authorization/api/v1/token',
+            auth=(os.environ['TRANSCRIPTION_USERNAME'], os.environ['TRANSCRIPTION_PASSWORD']),
+            params={'url': "https://stream.watsonplatform.net/speech-to-text/api"}
+        )
+
+        logger.info('Transcriber token generated')
+        return resp.content.decode('utf-8')
 
     def open(self):
         logger.info('Client connected')
-        # Add the connection to the list of connections
         self.connections.append(self)
 
+    @gen.coroutine
     def on_message(self, message):
-        # Check if message is Binary or Text
-        if type(message) == str:
-            logger.info("Binary Message recieved")
-            # Echo the binary message back to where it came from
-            self.write_message(message, binary=True)
-        else:
-            self.write_message('ok')
+        transcriber = yield self.transcriber
 
+        if type(message) != str:
+            transcriber.write_message(message, binary=True)
+        else:
+            logger.info(message)
+            data = json.loads(message)
+            data['action'] = "start"
+            data['continuous'] = True
+            data['interim_results'] = True
+            transcriber.write_message(json.dumps(data), binary=False)
+
+    def on_transcriber_message(self, message):
+        if message:
+            message = json.loads(message)
+            if 'results' in message:
+                transcript = message['results'][0]['alternatives'][0]['transcript']
+                tone_results = self.tone_analyzer.tone(tone_input=transcript, content_type="text/plain")
+                tones = tone_results['document_tone']['tone_categories'][0]['tones']
+
+                logger.info(tones)
+
+    @gen.coroutine
     def on_close(self):
         # Remove the connection from the list of connections
         self.connections.remove(self)
+        transcriber = yield self.transcriber
+        data = {'action': 'stop'}
+        transcriber.write_message(json.dumps(data), binary=False)
+        transcriber.close()
         logger.info("client disconnected")
 
 
