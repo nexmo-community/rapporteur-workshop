@@ -12,6 +12,7 @@ nexmo = "*"
 cryptography = "*"
 watson-developer-cloud = "*"
 tornado = "*"
+logzero = "*"
 
 
 [dev-packages]

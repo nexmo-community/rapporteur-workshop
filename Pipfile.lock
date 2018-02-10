@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6cc1ec7faf4057972f0b737d6978107ab7cc50f643f2cc2e43e70ab446a0c58b"
+            "sha256": "3b31b1d30cdc2a7509576cc1fa8d2baa16d891d34700551dfb8fbde531dc1c63"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -128,6 +128,13 @@
                 "sha256:2c6a5de3089009e3da7c5dde64a141dbc8551d5b7f6cf4ed7c2568d0cc520a8f"
             ],
             "version": "==2.6"
+        },
+        "logzero": {
+            "hashes": [
+                "sha256:172b4e170b96402551d79c86dc689199c43b5f32b3b976cf5e193b2995857316",
+                "sha256:f3433f87a184e1d846099c521437bfe9d463d4b74c3b2da3488b4f52ce821a1d"
+            ],
+            "version": "==1.3.1"
         },
         "nexmo": {
             "hashes": [

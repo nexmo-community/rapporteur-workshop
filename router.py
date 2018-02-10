@@ -1,6 +1,10 @@
 import os
 import hug
+import logzero
+from logzero import logger
 from recordings import Recording
+
+logzero.logfile("/tmp/rapporteur-ncco-server.log", maxBytes=1e6, backupCount=3)
 
 
 class CallRouter:
@@ -9,6 +13,8 @@ class CallRouter:
         self.base_url = os.environ['NCCO_SERVER_URL']
 
     def proxy(self):
+        logger.info('Proxy endpoint called')
+
         return [
             {
                 'action': 'talk',
@@ -34,6 +40,8 @@ class CallRouter:
         ]
 
     def recording(self, recording_url, recording_uuid):
+        logger.info('Recording endpoint called')
+
         recording = Recording(recording_url, recording_uuid)
         recording.save()
         recording.transcript()
@@ -42,6 +50,7 @@ class CallRouter:
         return recording.analysis
 
     def events(self, **kwargs):
+        logger.info('Event endpoint called')
         return kwargs
 
 

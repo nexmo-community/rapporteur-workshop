@@ -3,12 +3,16 @@ import time
 import uuid
 import jwt
 import requests
+import logzero
+from logzero import logger
 from watson_developer_cloud import SpeechToTextV1, NaturalLanguageUnderstandingV1
 from watson_developer_cloud.natural_language_understanding_v1 import (
     Features, EntitiesOptions, KeywordsOptions, CategoriesOptions, ConceptsOptions,
     EmotionOptions, RelationsOptions, SentimentOptions
 )
 from exceptions import RecordingNotFoundException
+
+logzero.logfile("/tmp/rapporteur-recordings.log", maxBytes=1e6, backupCount=3)
 
 
 class Recording:
@@ -48,9 +52,11 @@ class Recording:
         )
 
         if recording_response.status_code == 200:
+            logger.info('Recording file content got')
             self.content = recording_response.content
             return True
         else:
+            logger.exception(RecordingNotFoundException)
             raise RecordingNotFoundException
 
     def save(self):
@@ -59,6 +65,8 @@ class Recording:
 
         with open(f'./media/{self.recording_uuid}.mp3', 'wb') as f:
             f.write(self.content)
+
+        logger.info(f'Saved recording as ./media/{self.recording_uuid}.mp3')
 
     def transcript(self):
         if not self.content:
@@ -77,6 +85,7 @@ class Recording:
             word_confidence=False
         )
 
+        logger.info('Got recording transcript from IBM Watson')
         return self.transcription
 
     def understanding(self):
@@ -109,4 +118,5 @@ class Recording:
             )
         )
 
+        logger.info('Completed analysis of recorded file')
         return self.analysis
