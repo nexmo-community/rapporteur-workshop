@@ -11,6 +11,7 @@ hug = "*"
 nexmo = "*"
 cryptography = "*"
 watson-developer-cloud = "*"
+tornado = "*"
 
 
 [dev-packages]

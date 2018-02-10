@@ -21,7 +21,7 @@ class Recording:
         self.recording_url = recording_url
         self.recording_uuid = recording_uuid
 
-        self.base_url = os.environ['NGROK_URL']
+        self.base_url = os.environ['NCCO_SERVER_URL']
         with open('private.key', 'rb') as key_file:
             self.private_key = key_file.read()
 

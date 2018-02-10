@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "95a27dadf54e52174f7cdd29e33b6c28818edb4fc622e068e17d460044dd0910"
+            "sha256": "6cc1ec7faf4057972f0b737d6978107ab7cc50f643f2cc2e43e70ab446a0c58b"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -189,6 +189,16 @@
                 "sha256:70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9"
             ],
             "version": "==1.11.0"
+        },
+        "tornado": {
+            "hashes": [
+                "sha256:92b7ca81e18ba9ec3031a7ee73d4577ac21d41a0c9b775a9182f43301c3b5f8e",
+                "sha256:b36298e9f63f18cad97378db2222c0e0ca6a55f6304e605515e05a25483ed51a",
+                "sha256:ab587996fe6fb9ce65abfda440f9b61e4f9f2cf921967723540679176915e4c3",
+                "sha256:5ef073ac6180038ccf99411fe05ae9aafb675952a2c8db60592d5daf8401f803",
+                "sha256:6d14e47eab0e15799cf3cdcc86b0b98279da68522caace2bd7ce644287685f0a"
+            ],
+            "version": "==4.5.3"
         },
         "urllib3": {
             "hashes": [

@@ -6,9 +6,7 @@ from recordings import Recording
 class CallRouter:
 
     def __init__(self):
-        self.base_url = os.environ['NGROK_URL']
-        with open('private.key', 'rb') as key_file:
-            self.private_key = key_file.read()
+        self.base_url = os.environ['NCCO_SERVER_URL']
 
     def proxy(self):
         return [
@@ -26,8 +24,10 @@ class CallRouter:
                 'from': os.environ['NEXMO_NUMBER'],
                 'endpoint': [
                     {
-                        'type': 'phone',
-                        'number': os.environ['TEST_NUMBER']
+                        'type': 'websocket',
+                        'uri': f'{os.environ["WEBSOCKET_SERVER_URL"]}/socket',
+                        'content-type': 'audio/l16;rate=16000',
+                        'headers': {}
                     }
                 ]
             }
