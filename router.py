@@ -41,9 +41,13 @@ class CallRouter:
 
         return recording.analysis
 
+    def events(self, **kwargs):
+        return kwargs
+
 
 routes = CallRouter()
 server = hug.route.API(__name__)
 
 server.get('/')(routes.proxy)
 server.post('/recordings')(routes.recording)
+server.post('/events')(routes.events)
