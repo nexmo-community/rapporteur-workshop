@@ -13,6 +13,33 @@ from watson_developer_cloud import ToneAnalyzerV3
 logzero.logfile("/tmp/rapporteur-websocket-server.log", maxBytes=1e6, backupCount=3)
 
 
+class DashboardHandler(tornado.websocket.WebSocketHandler):
+
+    waiters = set()
+
+    def check_origin(self, origin):
+        return True
+
+    def open(self):
+        logger.info('Dashboard socket open')
+        DashboardHandler.waiters.add(self)
+
+    def on_close(self):
+        logger.info('Dashboard socket closed')
+        DashboardHandler.waiters.remove(self)
+
+    @classmethod
+    def send_updates(cls, tones):
+        logger.info('Sending dashboard update')
+        logger.warning(tones)
+
+        for waiter in cls.waiters:
+            try:
+                waiter.write_message(tones)
+            except:
+                pass
+
+
 class WSHandler(tornado.websocket.WebSocketHandler):
 
     connections = []
@@ -69,7 +96,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
                 tone_results = self.tone_analyzer.tone(tone_input=transcript, content_type="text/plain")
                 tones = tone_results['document_tone']['tone_categories'][0]['tones']
 
-                logger.info(tones)
+                DashboardHandler.send_updates(json.dumps(tones))
 
     @gen.coroutine
     def on_close(self):
@@ -82,9 +109,12 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         logger.info("client disconnected")
 
 
-application = tornado.web.Application([(r'/socket', WSHandler)])
-
 if __name__ == "__main__":
+    application = tornado.web.Application([
+        (r'/socket', WSHandler),
+        (r'/dashboard', DashboardHandler)
+    ])
+
     http_server = tornado.httpserver.HTTPServer(application)
     http_server.listen(8001)
     tornado.ioloop.IOLoop.instance().start()
