@@ -13,6 +13,11 @@ from watson_developer_cloud import ToneAnalyzerV3
 logzero.logfile("/tmp/rapporteur-websocket-server.log", maxBytes=1e6, backupCount=3)
 
 
+class DashboardUIHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("dashboard.html", server_url=os.environ['WEBSOCKET_SERVER_URL'])
+
+
 class DashboardHandler(tornado.websocket.WebSocketHandler):
 
     waiters = set()
@@ -112,7 +117,8 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 if __name__ == "__main__":
     application = tornado.web.Application([
         (r'/socket', WSHandler),
-        (r'/dashboard', DashboardHandler)
+        (r'/dashboard-socket', DashboardHandler),
+        (r'/dashboard', DashboardUIHandler)
     ])
 
     http_server = tornado.httpserver.HTTPServer(application)

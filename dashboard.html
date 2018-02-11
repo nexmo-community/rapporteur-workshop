@@ -88,7 +88,7 @@
           }
         );
 
-        var websocket = new WebSocket('ws://nexmo-rapporteur-ws.eu.ngrok.io/dashboard');
+        var websocket = new WebSocket('{{ server_url }}/dashboard-socket');
         websocket.onmessage = function(evt) {
           JSON.parse(evt.data).map(function(emotion){
             emotions[emotion.tone_id].append(new Date().getTime(), emotion.score)
